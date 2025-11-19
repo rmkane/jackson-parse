@@ -2,7 +2,6 @@ package com.example.jacksonparse.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -34,11 +33,9 @@ public class Person {
     private List<Address> addresses;
     
     @JacksonXmlProperty(localName = "birthDate")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime birthDate;
     
     @JacksonXmlProperty(localName = "registeredAt")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime registeredAt;
 
     private Map<String, Object> extra = new HashMap<>();

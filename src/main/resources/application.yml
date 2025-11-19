@@ -5,6 +5,10 @@ spring:
     serialization:
       write-dates-as-timestamps: false
     default-property-inclusion: non_null
+  mvc:
+    contentnegotiation:
+      favor-parameter: false
+      favor-path-extension: false
 
 server:
   port: 8080
