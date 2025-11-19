@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: jackson-parse
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+
+server:
+  port: 8080

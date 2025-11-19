@@ -1,0 +1,28 @@
+{
+  "version": "1.1",
+  "id": 1,
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "addresses": [
+    {
+      "street": "123 Main St",
+      "city": "Springfield",
+      "zipCode": "12345",
+      "primary": true,
+      "createdAt": "2024-01-15T10:30:00",
+      "updatedAt": "2024-01-20T14:45:00"
+    },
+    {
+      "street": "456 Oak Ave",
+      "city": "Springfield",
+      "zipCode": "12346",
+      "primary": false,
+      "createdAt": "2024-02-01T09:00:00",
+      "updatedAt": "2024-02-01T09:00:00"
+    }
+  ],
+  "birthDate": "1990-05-15T08:00:00",
+  "registeredAt": "2024-01-01T12:00:00",
+  "unknownA": "A",
+  "unknownB": "B"
+}

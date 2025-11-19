@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<person version="1.1">
+    <id>1</id>
+    <name>John Doe</name>
+    <email>john.doe@example.com</email>
+    <address primary="true">
+        <street>123 Main St</street>
+        <city>Springfield</city>
+        <zipCode>12345</zipCode>
+        <createdAt>2024-01-15T10:30:00</createdAt>
+        <updatedAt>2024-01-20T14:45:00</updatedAt>
+    </address>
+    <address>
+        <street>456 Oak Ave</street>
+        <city>Springfield</city>
+        <zipCode>12346</zipCode>
+        <createdAt>2024-02-01T09:00:00</createdAt>
+        <updatedAt>2024-02-01T09:00:00</updatedAt>
+    </address>
+    <birthDate>1990-05-15T08:00:00</birthDate>
+    <registeredAt>2024-01-01T12:00:00</registeredAt>
+    <unknownA>A</unknownA>
+    <unknownB>B</unknownB>
+</person>
