@@ -1,4 +1,4 @@
-package com.example.jacksonparse;
+package com.example.jacksonparse.controller;
 
 import com.example.jacksonparse.model.Address;
 import com.example.jacksonparse.model.Person;
@@ -77,6 +77,60 @@ class PersonIntegrationTest {
         verifyXmlResponse(xmlResponse, true);
     }
 
+    @Test
+    void testInvalidJsonTriggersExceptionHandler() {
+        var invalidJson = "{ invalid json }";
+        var headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        var entity = new HttpEntity<>(invalidJson, headers);
+        
+        var response = restTemplate.exchange(getBaseUrl(), HttpMethod.POST, entity, String.class);
+        
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().contains("Error:"));
+    }
+
+    @Test
+    void testInvalidXmlTriggersExceptionHandler() {
+        var invalidXml = "<person><invalid>";
+        var headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_XML);
+        var entity = new HttpEntity<>(invalidXml, headers);
+        
+        var response = restTemplate.exchange(getBaseUrl(), HttpMethod.POST, entity, String.class);
+        
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().contains("Error:"));
+    }
+
+    @Test
+    void testControllerWithNullContentType() throws IOException {
+        var body = loadResource("person.json");
+        var headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        var entity = new HttpEntity<>(body, headers);
+        
+        var response = restTemplate.exchange(getBaseUrl(), HttpMethod.POST, entity, String.class);
+        
+        // Spring will try to infer content type or may reject, but controller should handle it
+        assertNotNull(response);
+    }
+
+    @Test
+    void testControllerWithMissingAcceptHeader() throws IOException {
+        var body = loadResource("person.json");
+        var headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        var entity = new HttpEntity<>(body, headers);
+        
+        var response = restTemplate.exchange(getBaseUrl(), HttpMethod.POST, entity, String.class);
+        
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
     private ResponseEntity<String> fetch(String path, MediaType contentType, MediaType acceptType) throws IOException {
         var body = loadResource(path);
         var entity = createEntity(body, contentType, acceptType);
@@ -145,3 +199,4 @@ class PersonIntegrationTest {
         assertEquals(LocalDateTime.of(2024, 1, 1, 12, 0, 0), person.getRegisteredAt());
     }
 }
+

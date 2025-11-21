@@ -1,7 +1,5 @@
-package com.example.jacksonparse;
+package com.example.jacksonparse.model;
 
-import com.example.jacksonparse.model.Address;
-import com.example.jacksonparse.model.Person;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
