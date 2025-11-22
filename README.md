@@ -4,7 +4,7 @@
 A Spring Boot application demonstrating dual support for XML and JSON serialization/deserialization using Jackson.
 
 <!-- omit in toc -->
-## Table of Cntents
+## Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
@@ -12,10 +12,12 @@ A Spring Boot application demonstrating dual support for XML and JSON serializat
 - [API Endpoint](#api-endpoint)
   - [POST `/api/person`](#post-apiperson)
 - [Running the Application](#running-the-application)
-- [Testing](#testing)
+- [Development](#development)
+  - [Code Formatting](#code-formatting)
   - [Unit Tests](#unit-tests)
   - [Integration Tests](#integration-tests)
   - [Code Coverage](#code-coverage)
+- [CI/CD](#cicd)
 - [Configuration](#configuration)
 - [Model Structure](#model-structure)
 
@@ -98,28 +100,78 @@ Creates/processes a person object. Accepts both XML and JSON, and can return eit
 
 ## Running the Application
 
+**Using Maven:**
+
 ```bash
 mvn spring-boot:run
 ```
 
+**Using Make:**
+
+```bash
+make run
+```
+
 The application will start on port 8080 (configurable in `application.yml`).
 
-## Testing
+## Development
+
+### Code Formatting
+
+This project uses [Spotless](https://github.com/diffplug/spotless) with the Eclipse formatter for consistent code style.
+
+**Format code:**
+
+```bash
+make format
+# or
+mvn spotless:apply
+```
+
+**Check formatting:**
+
+```bash
+make format-check
+# or
+mvn spotless:check
+```
+
+**Formatting rules:**
+
+- Eclipse default formatter style
+- 4 spaces indentation
+- 120 character line length
+- Import order: `java`, `javax`, `jakarta`, `org`, `com`, `io`, `lombok`
+- No wildcard imports (threshold: 99)
 
 ### Unit Tests
 
-Run unit tests:
+**Using Maven:**
 
 ```bash
 mvn test
 ```
 
+**Using Make:**
+
+```bash
+make test
+```
+
 ### Integration Tests
 
-Run integration tests (requires the application to be running):
+**Using Maven:**
 
 ```bash
 mvn test -Pintegration-tests
+```
+
+**Using Make:**
+
+```bash
+make test-integration
+# or run all tests
+make test-all
 ```
 
 Integration tests verify all combinations:
@@ -153,6 +205,8 @@ xdg-open target/site/jacoco/index.html  # Linux
 
 ```bash
 mvn clean test -Pintegration-tests jacoco:report
+# or using Make
+make coverage
 ```
 
 **Coverage Exclusions:**
@@ -174,6 +228,37 @@ The thresholds are configured in `pom.xml` and enforce:
 - 100% line coverage
 - 100% method coverage
 - 0 missed classes
+
+**Check coverage thresholds:**
+
+```bash
+make coverage-check
+# or
+mvn jacoco:check
+```
+
+## CI/CD
+
+This project uses GitHub Actions for continuous integration. The workflow automatically runs on every push and pull request to `main`, `master`, or `develop` branches.
+
+**CI Pipeline:**
+
+1. Verify code formatting (`mvn spotless:check`)
+2. Compile code (`mvn clean compile`)
+3. Run all tests with coverage (`mvn test -Pintegration-tests jacoco:report`)
+4. Verify coverage thresholds (`mvn jacoco:check`)
+
+**Artifacts:**
+
+- Coverage reports (retained for 30 days)
+- Test results (retained for 7 days)
+
+The build will fail if:
+
+- Code formatting doesn't match the configured style
+- Code doesn't compile
+- Any tests fail
+- Coverage drops below 100%
 
 ## Configuration
 
