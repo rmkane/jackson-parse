@@ -21,6 +21,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Verify code formatting
+        run: mvn spotless:check
+
       - name: Compile code
         run: mvn clean compile
 
