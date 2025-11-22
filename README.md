@@ -1,6 +1,23 @@
+<!-- omit in toc -->
 # Jackson Parse
 
 A Spring Boot application demonstrating dual support for XML and JSON serialization/deserialization using Jackson.
+
+<!-- omit in toc -->
+## Table of Cntents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [API Endpoint](#api-endpoint)
+  - [POST `/api/person`](#post-apiperson)
+- [Running the Application](#running-the-application)
+- [Testing](#testing)
+  - [Unit Tests](#unit-tests)
+  - [Integration Tests](#integration-tests)
+  - [Code Coverage](#code-coverage)
+- [Configuration](#configuration)
+- [Model Structure](#model-structure)
 
 ## Overview
 
@@ -111,6 +128,52 @@ Integration tests verify all combinations:
 - JSON input → XML output
 - XML input → JSON output
 - XML input → XML output
+
+### Code Coverage
+
+Code coverage is measured using JaCoCo. The project maintains **100% code coverage** for all business logic.
+
+**Generate Coverage Report:**
+
+```bash
+mvn clean test jacoco:report
+```
+
+**View Coverage Report:**
+
+Open the HTML report in your browser:
+
+```bash
+open target/site/jacoco/index.html  # macOS
+# or
+xdg-open target/site/jacoco/index.html  # Linux
+```
+
+**Coverage with Integration Tests:**
+
+```bash
+mvn clean test -Pintegration-tests jacoco:report
+```
+
+**Coverage Exclusions:**
+
+The `main` method in `JacksonParseApplication` is excluded from coverage as it's a standard Spring Boot entry point with no business logic.
+
+**Coverage Thresholds:**
+
+The build is configured to enforce 100% coverage. If coverage drops below this threshold, the build will fail. To check coverage thresholds:
+
+```bash
+mvn jacoco:check
+```
+
+The thresholds are configured in `pom.xml` and enforce:
+
+- 100% instruction coverage
+- 100% branch coverage
+- 100% line coverage
+- 100% method coverage
+- 0 missed classes
 
 ## Configuration
 

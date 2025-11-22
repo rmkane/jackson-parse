@@ -9,4 +9,3 @@ public class JacksonParseApplication {
         SpringApplication.run(JacksonParseApplication.class, args);
     }
 }
-

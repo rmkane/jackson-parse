@@ -1,11 +1,13 @@
-package com.example.jacksonparse;
+package com.example.jacksonparse.model;
 
-import com.example.jacksonparse.model.Address;
-import com.example.jacksonparse.model.Person;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,11 +15,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.lang.NonNull;
 import org.springframework.test.context.TestConstructor;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import lombok.RequiredArgsConstructor;
 
 @SpringBootTest
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
@@ -30,29 +31,29 @@ class PersonParsingTest {
     void testParseJsonFromResourceFile() throws IOException {
         // Load JSON resource file
         Person person = loadPerson("person.json", jsonMapper);
-        
+
         // Verify the parsed object
         assertNotNull(person);
         assertEquals(1L, person.getId());
         assertEquals("John Doe", person.getName());
         assertEquals("john.doe@example.com", person.getEmail());
-        
+
         // Verify nested Address objects
         assertNotNull(person.getAddresses());
         assertEquals(2, person.getAddresses().size());
-        
+
         Address primaryAddress = person.getAddresses().get(0);
         assertEquals("123 Main St", primaryAddress.getStreet());
         assertEquals("Springfield", primaryAddress.getCity());
         assertEquals("12345", primaryAddress.getZipCode());
         assertTrue(primaryAddress.isPrimary());
-        
+
         Address secondaryAddress = person.getAddresses().get(1);
         assertEquals("456 Oak Ave", secondaryAddress.getStreet());
         assertEquals("Springfield", secondaryAddress.getCity());
         assertEquals("12346", secondaryAddress.getZipCode());
         assertFalse(secondaryAddress.isPrimary());
-        
+
         // Verify LocalDateTime fields
         assertEquals(LocalDateTime.of(2024, 1, 15, 10, 30, 0), primaryAddress.getCreatedAt());
         assertEquals(LocalDateTime.of(2024, 1, 20, 14, 45, 0), primaryAddress.getUpdatedAt());
@@ -64,29 +65,29 @@ class PersonParsingTest {
     void testParseXmlFromResourceFile() throws IOException {
         // Load XML resource file
         Person person = loadPerson("person.xml", xmlMapper);
-        
+
         // Verify the parsed object
         assertNotNull(person);
         assertEquals(1L, person.getId());
         assertEquals("John Doe", person.getName());
         assertEquals("john.doe@example.com", person.getEmail());
-        
+
         // Verify nested Address objects
         assertNotNull(person.getAddresses());
         assertEquals(2, person.getAddresses().size());
-        
+
         Address primaryAddress = person.getAddresses().get(0);
         assertEquals("123 Main St", primaryAddress.getStreet());
         assertEquals("Springfield", primaryAddress.getCity());
         assertEquals("12345", primaryAddress.getZipCode());
         assertTrue(primaryAddress.isPrimary());
-        
+
         Address secondaryAddress = person.getAddresses().get(1);
         assertEquals("456 Oak Ave", secondaryAddress.getStreet());
         assertEquals("Springfield", secondaryAddress.getCity());
         assertEquals("12346", secondaryAddress.getZipCode());
         assertFalse(secondaryAddress.isPrimary());
-        
+
         // Verify LocalDateTime fields
         assertEquals(LocalDateTime.of(2024, 1, 15, 10, 30, 0), primaryAddress.getCreatedAt());
         assertEquals(LocalDateTime.of(2024, 1, 20, 14, 45, 0), primaryAddress.getUpdatedAt());
@@ -103,14 +104,14 @@ class PersonParsingTest {
         // Parse both JSON and XML
         Person jsonPerson = loadPerson("person.json", jsonMapper);
         Person xmlPerson = loadPerson("person.xml", xmlMapper);
-        
+
         // Verify they produce equivalent objects
         assertEquals(jsonPerson.getId(), xmlPerson.getId());
         assertEquals(jsonPerson.getName(), xmlPerson.getName());
         assertEquals(jsonPerson.getEmail(), xmlPerson.getEmail());
         assertEquals(jsonPerson.getBirthDate(), xmlPerson.getBirthDate());
         assertEquals(jsonPerson.getRegisteredAt(), xmlPerson.getRegisteredAt());
-        
+
         assertEquals(jsonPerson.getAddresses().size(), xmlPerson.getAddresses().size());
         for (int i = 0; i < jsonPerson.getAddresses().size(); i++) {
             Address jsonAddr = jsonPerson.getAddresses().get(i);
@@ -134,4 +135,3 @@ class PersonParsingTest {
         }
     }
 }
-
