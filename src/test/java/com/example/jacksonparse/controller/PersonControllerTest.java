@@ -1,8 +1,15 @@
 package com.example.jacksonparse.controller;
 
-import com.example.jacksonparse.model.Address;
-import com.example.jacksonparse.model.Person;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 import jakarta.servlet.http.HttpServletRequest;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,11 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import com.example.jacksonparse.model.Address;
+import com.example.jacksonparse.model.Person;
 
 @ExtendWith(MockitoExtension.class)
 class PersonControllerTest {
@@ -125,4 +129,3 @@ class PersonControllerTest {
         return person;
     }
 }
-

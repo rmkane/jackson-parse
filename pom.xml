@@ -14,16 +14,17 @@
     
     <groupId>com.example</groupId>
     <artifactId>jackson-parse</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>Jackson Parse</name>
     <description>Spring Boot app with Jackson XML/JSON support</description>
     
     <properties>
         <!-- Dependency versions -->
-        <openapi.version>2.8.14</openapi.version>
+        <spotless.version>2.43.0</spotless.version>
         <jacoco.version>0.8.14</jacoco.version>
-
+        <openapi.version>2.8.14</openapi.version>
+        
         <!-- Tests related properties -->
         <excluded.test.groups>integration</excluded.test.groups>
     </properties>
@@ -86,11 +87,7 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
+            <!-- Core Maven plugins -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -106,6 +103,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Test plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -114,6 +112,32 @@
                 </configuration>
             </plugin>
 
+            <!-- Spring Boot plugin -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- Code quality plugins (alphabetically) -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless.version}</version>
+                <configuration>
+                    <java>
+                        <importOrder>
+                            <order>java,javax,jakarta,org,com,io,lombok</order>
+                        </importOrder>
+                        <removeUnusedImports/>
+                        <eclipse>
+                            <file>${project.basedir}/.formatter.xml</file>
+                            <version>4.26</version>
+                        </eclipse>
+                    </java>
+                </configuration>
+            </plugin>
+
+            <!-- Code coverage plugin -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>

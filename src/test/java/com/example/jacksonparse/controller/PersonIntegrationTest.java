@@ -1,11 +1,14 @@
 package com.example.jacksonparse.controller;
 
-import com.example.jacksonparse.model.Address;
-import com.example.jacksonparse.model.Person;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.util.Collections;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -13,22 +16,26 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.util.StreamUtils;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.util.Collections;
+import com.example.jacksonparse.model.Address;
+import com.example.jacksonparse.model.Person;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import lombok.RequiredArgsConstructor;
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @RequiredArgsConstructor
-@SuppressWarnings("null")
 class PersonIntegrationTest {
     private final TestRestTemplate restTemplate;
     private final ObjectMapper objectMapper;
@@ -83,9 +90,9 @@ class PersonIntegrationTest {
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         var entity = new HttpEntity<>(invalidJson, headers);
-        
+
         var response = restTemplate.exchange(getBaseUrl(), HttpMethod.POST, entity, String.class);
-        
+
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
         assertTrue(response.getBody().contains("Error:"));
@@ -97,9 +104,9 @@ class PersonIntegrationTest {
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_XML);
         var entity = new HttpEntity<>(invalidXml, headers);
-        
+
         var response = restTemplate.exchange(getBaseUrl(), HttpMethod.POST, entity, String.class);
-        
+
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNotNull(response.getBody());
         assertTrue(response.getBody().contains("Error:"));
@@ -111,9 +118,9 @@ class PersonIntegrationTest {
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         var entity = new HttpEntity<>(body, headers);
-        
+
         var response = restTemplate.exchange(getBaseUrl(), HttpMethod.POST, entity, String.class);
-        
+
         // Spring will try to infer content type or may reject, but controller should handle it
         assertNotNull(response);
     }
@@ -124,9 +131,9 @@ class PersonIntegrationTest {
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         var entity = new HttpEntity<>(body, headers);
-        
+
         var response = restTemplate.exchange(getBaseUrl(), HttpMethod.POST, entity, String.class);
-        
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
     }
@@ -175,23 +182,23 @@ class PersonIntegrationTest {
         assertEquals(1L, person.getId());
         assertEquals("John Doe", person.getName());
         assertEquals("john.doe@example.com", person.getEmail());
-        
+
         // Verify nested Address objects
         assertNotNull(person.getAddresses());
         assertEquals(2, person.getAddresses().size());
-        
+
         Address primaryAddress = person.getAddresses().get(0);
         assertEquals("123 Main St", primaryAddress.getStreet());
         assertEquals("Springfield", primaryAddress.getCity());
         assertEquals("12345", primaryAddress.getZipCode());
         assertTrue(primaryAddress.isPrimary());
-        
+
         Address secondaryAddress = person.getAddresses().get(1);
         assertEquals("456 Oak Ave", secondaryAddress.getStreet());
         assertEquals("Springfield", secondaryAddress.getCity());
         assertEquals("12346", secondaryAddress.getZipCode());
         assertFalse(secondaryAddress.isPrimary());
-        
+
         // Verify LocalDateTime fields
         assertEquals(LocalDateTime.of(2024, 1, 15, 10, 30, 0), primaryAddress.getCreatedAt());
         assertEquals(LocalDateTime.of(2024, 1, 20, 14, 45, 0), primaryAddress.getUpdatedAt());
@@ -199,4 +206,3 @@ class PersonIntegrationTest {
         assertEquals(LocalDateTime.of(2024, 1, 1, 12, 0, 0), person.getRegisteredAt());
     }
 }
-
