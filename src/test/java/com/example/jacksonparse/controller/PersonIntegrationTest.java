@@ -121,7 +121,8 @@ class PersonIntegrationTest {
 
         var response = restTemplate.exchange(getBaseUrl(), HttpMethod.POST, entity, String.class);
 
-        // Spring will try to infer content type or may reject, but controller should handle it
+        // Spring will try to infer content type or may reject, but controller should
+        // handle it
         assertNotNull(response);
     }
 

@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.5.6</version>
         <relativePath/>
     </parent>
-    
+
     <groupId>com.example</groupId>
     <artifactId>jackson-parse</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <name>Jackson Parse</name>
     <description>Spring Boot app with Jackson XML/JSON support</description>
-    
+
     <properties>
         <!-- Dependency versions -->
         <spotless.version>2.43.0</spotless.version>
         <jacoco.version>0.8.14</jacoco.version>
         <openapi.version>2.8.14</openapi.version>
-        
+
         <!-- Tests related properties -->
         <excluded.test.groups>integration</excluded.test.groups>
     </properties>
-    
+
     <dependencies>
         <!-- Spring Web -->
         <dependency>
@@ -49,13 +49,13 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
-        
+
         <!-- Jackson XML support -->
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
         </dependency>
-        
+
         <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -63,7 +63,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <profiles>
         <profile>
             <id>integration-tests</id>
@@ -130,7 +130,7 @@
                         </importOrder>
                         <removeUnusedImports/>
                         <eclipse>
-                            <file>${project.basedir}/.formatter.xml</file>
+                            <file>${project.basedir}/formatter.xml</file>
                             <version>4.26</version>
                         </eclipse>
                     </java>

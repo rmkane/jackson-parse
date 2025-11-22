@@ -16,23 +16,15 @@ public class JacksonConfig {
     @Bean
     @Primary
     public ObjectMapper objectMapper() {
-        // @formatter:off
-        return JsonMapper.builder()
-                .addModule(new JavaTimeModule())
+        return JsonMapper.builder().addModule(new JavaTimeModule())
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-                .build();
-        // @formatter:on
+                .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).build();
     }
 
     @Bean
     public XmlMapper xmlMapper() {
-        // @formatter:off
-        return XmlMapper.builder()
-                .addModule(new JavaTimeModule())
+        return XmlMapper.builder().addModule(new JavaTimeModule())
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-                .build();
-        // @formatter:on
+                .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).build();
     }
 }
