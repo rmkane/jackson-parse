@@ -1,0 +1,59 @@
+image: maven:3.9-eclipse-temurin-17
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
+
+cache:
+  paths:
+    - .m2/repository/
+
+stages:
+  - verify
+  - test
+  - coverage
+
+format-check:
+  stage: verify
+  script:
+    - mvn spotless:check
+  artifacts:
+    when: on_failure
+    paths:
+      - target/spotless-diff/
+    expire_in: 1 week
+
+compile:
+  stage: verify
+  script:
+    - mvn clean compile
+  artifacts:
+    paths:
+      - target/classes/
+    expire_in: 1 day
+
+test:
+  stage: test
+  script:
+    - mvn clean test -Pintegration-tests
+  artifacts:
+    when: always
+    paths:
+      - target/surefire-reports/
+    reports:
+      junit: target/surefire-reports/TEST-*.xml
+    expire_in: 1 week
+
+coverage:
+  stage: coverage
+  script:
+    - mvn clean test -Pintegration-tests jacoco:report
+    - mvn jacoco:check
+  coverage: '/Total.*?([0-9]{1,3})%/'
+  artifacts:
+    paths:
+      - target/site/jacoco/
+    reports:
+      junit: target/surefire-reports/TEST-*.xml
+    expire_in: 30 days
+
